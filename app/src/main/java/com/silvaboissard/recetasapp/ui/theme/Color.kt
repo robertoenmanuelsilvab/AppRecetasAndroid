@@ -2,10 +2,14 @@ package com.silvaboissard.recetasapp.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+val Naranja80 = Color(0xFFFFB59D)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+val Naranja40 = Color(0xFFC1440E)
+
+val Crema80 = Color(0xFFFFE0C7)
+
+val Crema40 = Color(0xFF8B5A2B)
+
+val Verde80 = Color(0xFFB8D8B0)
+
+val Verde40 = Color(0xFF3E7C3E)
