@@ -23,7 +23,15 @@ import com.silvaboissard.recetasapp.ui.screens.ListaScreen
 // Rutas centralizadas de la app
 sealed class Pantalla(val ruta: String) {
     object Inicio : Pantalla("inicio")
+
+    // Ruta sin filtro: muestra todas las recetas
     object Lista : Pantalla("lista")
+
+    // Ruta con filtro: requiere una categoria en el path
+    object ListaPorCategoria : Pantalla("lista/{categoria}") {
+        fun crearRuta(categoria: String) = "lista/$categoria"
+    }
+
     object Detalle : Pantalla("detalle/{recetaId}") {
         fun crearRuta(id: Int) = "detalle/$id"
     }
@@ -31,9 +39,10 @@ sealed class Pantalla(val ruta: String) {
 
 // Titulo que se muestra en la TopAppBar segun la pantalla actual
 private fun tituloParaRuta(ruta: String?): String = when {
+    ruta == null -> "RecetasApp"
     ruta == Pantalla.Inicio.ruta -> "RecetasApp"
-    ruta == Pantalla.Lista.ruta -> "Todas las recetas"
-    ruta?.startsWith("detalle") == true -> "Detalle de receta"
+    ruta.startsWith("lista") -> "Recetas"
+    ruta.startsWith("detalle") -> "Detalle de receta"
     else -> "RecetasApp"
 }
 
@@ -62,8 +71,17 @@ fun AppPrincipal() {
             composable(Pantalla.Inicio.ruta) {
                 InicioScreen(navController = navController)
             }
+            // Lista SIN filtro
             composable(Pantalla.Lista.ruta) {
-                ListaScreen(navController = navController)
+                ListaScreen(navController = navController, categoriaFiltro = null)
+            }
+            // Lista CON filtro de categoria
+            composable(
+                route = Pantalla.ListaPorCategoria.ruta,
+                arguments = listOf(navArgument("categoria") { type = NavType.StringType }),
+            ) { backStack ->
+                val categoria = backStack.arguments?.getString("categoria")
+                ListaScreen(navController = navController, categoriaFiltro = categoria)
             }
             composable(
                 route = Pantalla.Detalle.ruta,

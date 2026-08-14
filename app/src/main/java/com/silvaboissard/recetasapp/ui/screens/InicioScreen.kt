@@ -24,7 +24,7 @@ import com.silvaboissard.recetasapp.ui.navigation.Pantalla
 
 @Composable
 fun InicioScreen(navController: NavController) {
-    // Lista de categorias unicas extraida de las recetas de muestra
+
     val categorias = recetasDeMuestra.map { it.categoria }.distinct()
 
     Column(
@@ -53,14 +53,14 @@ fun InicioScreen(navController: NavController) {
                 .padding(bottom = 8.dp),
         )
 
-        // LazyRow con las categorias disponibles
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             contentPadding = PaddingValues(vertical = 8.dp),
         ) {
             items(categorias) { categoria ->
-                Card(
-                    onClick = { navController.navigate(Pantalla.Lista.ruta) },
+
+                    Card(
+                        onClick = { navController.navigate(Pantalla.ListaPorCategoria.crearRuta(categoria)) },
                     elevation = CardDefaults.cardElevation(4.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = MaterialTheme.colorScheme.primaryContainer,

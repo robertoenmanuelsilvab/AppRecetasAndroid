@@ -70,7 +70,7 @@ fun DetalleScreen(recetaId: Int, navController: NavController) {
                 modifier = Modifier.padding(top = 16.dp, bottom = 8.dp),
             )
 
-            // LazyColumn para los pasos, cada uno numerado
+
             LazyColumn(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp),

@@ -1,6 +1,5 @@
 package com.silvaboissard.recetasapp.ui.screens
 
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +20,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -31,16 +31,23 @@ import com.silvaboissard.recetasapp.data.Receta
 import com.silvaboissard.recetasapp.data.recetasDeMuestra
 import com.silvaboissard.recetasapp.ui.navigation.Pantalla
 
-// Saver personalizado para que la lista de IDs favoritos sobreviva rotaciones
+
 private val favoritosSaver = listSaver<SnapshotStateList<Int>, Int>(
     save = { it.toList() },
     restore = { it.toMutableStateList() },
 )
 
 @Composable
-fun ListaScreen(navController: NavController) {
-    // rememberSaveable: los favoritos se mantienen aunque el dispositivo rote
+fun ListaScreen(navController: NavController, categoriaFiltro: String? = null) {
+
     val favoritos = rememberSaveable(saver = favoritosSaver) { mutableStateListOf() }
+
+
+    val recetasMostradas = if (categoriaFiltro != null) {
+        recetasDeMuestra.filter { it.categoria == categoriaFiltro }
+    } else {
+        recetasDeMuestra
+    }
 
     LazyColumn(
         modifier = Modifier
@@ -48,7 +55,7 @@ fun ListaScreen(navController: NavController) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(recetasDeMuestra) { receta ->
+        items(recetasMostradas) { receta ->
             ItemReceta(
                 receta = receta,
                 esFavorito = favoritos.contains(receta.id),

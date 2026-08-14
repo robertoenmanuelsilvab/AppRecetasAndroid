@@ -9,7 +9,6 @@ data class Receta(
     val pasos: List<String>,
 )
 
-// Datos de muestra (hardcodeados). Reemplázalos por tus recetas reales.
 val recetasDeMuestra = listOf(
     Receta(
         id = 1,
