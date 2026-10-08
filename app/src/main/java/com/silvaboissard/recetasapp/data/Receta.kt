@@ -1,5 +1,6 @@
 package com.silvaboissard.recetasapp.data
-
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 data class Receta(
     val id: Int,
     val nombre: String,
@@ -71,3 +72,27 @@ val recetasDeMuestra = listOf(
         ),
     ),
 )
+
+
+
+// Repositorio simple en memoria: permite agregar recetas en tiempo de ejecucion.
+// (Mas adelante en el curso esto se reemplaza por un Repository + Room/Retrofit reales).
+object RecetasRepo {
+    val recetas: SnapshotStateList<Receta> = mutableStateListOf<Receta>().apply {
+        addAll(recetasDeMuestra)
+    }
+
+    fun agregarReceta(nombre: String, categoria: String, tiempoPrepMinutos: Int) {
+        val nuevoId = (recetas.maxOfOrNull { it.id } ?: 0) + 1
+        recetas.add(
+            Receta(
+                id = nuevoId,
+                nombre = nombre,
+                categoria = categoria,
+                tiempoPrepMinutos = tiempoPrepMinutos,
+                ingredientes = listOf("Agrega tus ingredientes aqui"),
+                pasos = listOf("Agrega los pasos aqui"),
+            )
+        )
+    }
+}

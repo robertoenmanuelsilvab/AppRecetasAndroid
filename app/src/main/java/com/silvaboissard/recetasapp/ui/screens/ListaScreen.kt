@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.silvaboissard.recetasapp.data.Receta
-import com.silvaboissard.recetasapp.data.recetasDeMuestra
+import com.silvaboissard.recetasapp.data.RecetasRepo
 import com.silvaboissard.recetasapp.ui.navigation.Pantalla
 
 
@@ -44,9 +44,9 @@ fun ListaScreen(navController: NavController, categoriaFiltro: String? = null) {
 
 
     val recetasMostradas = if (categoriaFiltro != null) {
-        recetasDeMuestra.filter { it.categoria == categoriaFiltro }
+        RecetasRepo.recetas.filter { it.categoria == categoriaFiltro }
     } else {
-        recetasDeMuestra
+        RecetasRepo.recetas
     }
 
     LazyColumn(

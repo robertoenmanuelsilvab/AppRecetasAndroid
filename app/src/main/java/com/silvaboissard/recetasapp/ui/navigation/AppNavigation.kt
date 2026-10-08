@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.silvaboissard.recetasapp.ui.screens.AgregarRecetaScreen
 import com.silvaboissard.recetasapp.ui.screens.DetalleScreen
 import com.silvaboissard.recetasapp.ui.screens.InicioScreen
 import com.silvaboissard.recetasapp.ui.screens.ListaScreen
@@ -35,6 +36,8 @@ sealed class Pantalla(val ruta: String) {
     object Detalle : Pantalla("detalle/{recetaId}") {
         fun crearRuta(id: Int) = "detalle/$id"
     }
+
+    object AgregarReceta : Pantalla("agregar_receta")
 }
 
 // Titulo que se muestra en la TopAppBar segun la pantalla actual
@@ -43,6 +46,7 @@ private fun tituloParaRuta(ruta: String?): String = when {
     ruta == Pantalla.Inicio.ruta -> "RecetasApp"
     ruta.startsWith("lista") -> "Recetas"
     ruta.startsWith("detalle") -> "Detalle de receta"
+    ruta == Pantalla.AgregarReceta.ruta -> "Agregar Receta"
     else -> "RecetasApp"
 }
 
@@ -89,6 +93,9 @@ fun AppPrincipal() {
             ) { backStack ->
                 val id = backStack.arguments?.getInt("recetaId") ?: 0
                 DetalleScreen(recetaId = id, navController = navController)
+            }
+            composable(Pantalla.AgregarReceta.ruta) {
+                AgregarRecetaScreen(navController = navController)
             }
         }
     }

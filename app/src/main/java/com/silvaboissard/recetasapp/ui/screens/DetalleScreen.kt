@@ -17,11 +17,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.silvaboissard.recetasapp.data.recetasDeMuestra
+import com.silvaboissard.recetasapp.data.RecetasRepo
+import android.content.Intent
+import androidx.compose.material3.Button
+import androidx.compose.ui.platform.LocalContext
+
 
 @Composable
 fun DetalleScreen(recetaId: Int, navController: NavController) {
-    val receta = recetasDeMuestra.find { it.id == recetaId }
+    val receta = RecetasRepo.recetas.find { it.id == recetaId }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -85,7 +90,38 @@ fun DetalleScreen(recetaId: Int, navController: NavController) {
                     }
                 }
             }
+
+            Button(
+                onClick = {
+                              val textoCompartir = buildString {
+                        appendLine("Receta: ${receta.nombre}")
+                        appendLine("Categoría: ${receta.categoria}")
+                        appendLine("Tiempo: ${receta.tiempoPrepMinutos} min")
+                        appendLine()
+                        appendLine("Ingredientes:")
+                        receta.ingredientes.forEach { appendLine("- $it") }
+                        appendLine()
+                        appendLine("Pasos:")
+                        receta.pasos.forEachIndexed { i, paso -> appendLine("${i + 1}. $paso") }
+                    }
+
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_SUBJECT, receta.nombre)
+                        putExtra(Intent.EXTRA_TEXT, textoCompartir)
+                    }
+
+                    // createChooser muestra el selector de apps de Android
+                    context.startActivity(Intent.createChooser(intent, "Compartir receta con..."))
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+            ) {
+                Text("Compartir")
+            }
         }
+
 
         OutlinedButton(
             onClick = { navController.popBackStack() },
