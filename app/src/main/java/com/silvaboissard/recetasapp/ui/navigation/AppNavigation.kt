@@ -20,6 +20,7 @@ import com.silvaboissard.recetasapp.ui.screens.AgregarRecetaScreen
 import com.silvaboissard.recetasapp.ui.screens.DetalleScreen
 import com.silvaboissard.recetasapp.ui.screens.InicioScreen
 import com.silvaboissard.recetasapp.ui.screens.ListaScreen
+import com.silvaboissard.recetasapp.ui.screens.OfertasScreen
 
 // Rutas centralizadas de la app
 sealed class Pantalla(val ruta: String) {
@@ -38,6 +39,9 @@ sealed class Pantalla(val ruta: String) {
     }
 
     object AgregarReceta : Pantalla("agregar_receta")
+
+    object Ofertas : Pantalla("ofertas")
+
 }
 
 // Titulo que se muestra en la TopAppBar segun la pantalla actual
@@ -97,6 +101,11 @@ fun AppPrincipal() {
             composable(Pantalla.AgregarReceta.ruta) {
                 AgregarRecetaScreen(navController = navController)
             }
+
+            composable(Pantalla.Ofertas.ruta) {
+                OfertasScreen(navController = navController)
+            }
+
         }
     }
 }

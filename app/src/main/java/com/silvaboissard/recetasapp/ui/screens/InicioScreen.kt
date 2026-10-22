@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.silvaboissard.recetasapp.data.RecetasRepo
 import com.silvaboissard.recetasapp.ui.navigation.Pantalla
+import androidx.compose.material3.OutlinedButton
 
 
 @Composable
@@ -133,6 +134,13 @@ fun InicioScreen(navController: NavController) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text("Ver todas las recetas")
+            }
+
+            OutlinedButton(
+                onClick = { navController.navigate(Pantalla.Ofertas.ruta) },
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text("Ver ofertas (Flow)")
             }
         }
     }
