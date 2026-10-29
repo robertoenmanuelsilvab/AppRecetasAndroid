@@ -27,9 +27,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.silvaboissard.recetasapp.data.Receta
-import com.silvaboissard.recetasapp.data.RecetasRepo
 import com.silvaboissard.recetasapp.ui.navigation.Pantalla
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.silvaboissard.recetasapp.di.AppContainer
+import com.silvaboissard.recetasapp.domain.model.Receta
+import com.silvaboissard.recetasapp.ui.viewmodel.ListaViewModel
+
 
 
 private val favoritosSaver = listSaver<SnapshotStateList<Int>, Int>(
@@ -43,11 +50,13 @@ fun ListaScreen(navController: NavController, categoriaFiltro: String? = null) {
     val favoritos = rememberSaveable(saver = favoritosSaver) { mutableStateListOf() }
 
 
-    val recetasMostradas = if (categoriaFiltro != null) {
-        RecetasRepo.recetas.filter { it.categoria == categoriaFiltro }
-    } else {
-        RecetasRepo.recetas
-    }
+    val viewModel: ListaViewModel = viewModel(
+        factory = viewModelFactory {
+            initializer { ListaViewModel(categoriaFiltro, AppContainer.obtenerRecetas) }
+        },
+    )
+    val uiState by viewModel.uiState.collectAsState()
+    val recetasMostradas = uiState.recetas
 
     LazyColumn(
         modifier = Modifier

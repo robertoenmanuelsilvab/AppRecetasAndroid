@@ -21,11 +21,32 @@ import com.silvaboissard.recetasapp.data.RecetasRepo
 import android.content.Intent
 import androidx.compose.material3.Button
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.silvaboissard.recetasapp.di.AppContainer
+import com.silvaboissard.recetasapp.domain.model.Receta
+import com.silvaboissard.recetasapp.ui.viewmodel.ListaViewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.silvaboissard.recetasapp.ui.viewmodel.InicioViewModel
+import androidx.compose.material3.CircularProgressIndicator
+import com.silvaboissard.recetasapp.ui.viewmodel.DetalleViewModel
+import com.silvaboissard.recetasapp.ui.viewmodel.DetalleUiState
 
 
 @Composable
 fun DetalleScreen(recetaId: Int, navController: NavController) {
-    val receta = RecetasRepo.recetas.find { it.id == recetaId }
+    val viewModel: DetalleViewModel = viewModel(
+        factory = viewModelFactory {
+            initializer { DetalleViewModel(recetaId, AppContainer.obtenerRecetaPorId) }
+        },
+    )
+    val uiState by viewModel.uiState.collectAsState()
+    val receta = (uiState as? DetalleUiState.Encontrada)?.receta
     val context = LocalContext.current
 
     Column(
@@ -34,7 +55,8 @@ fun DetalleScreen(recetaId: Int, navController: NavController) {
             .padding(24.dp),
     ) {
         if (receta == null) {
-            Text("Receta no encontrada")
+            if (uiState is DetalleUiState.Cargando) CircularProgressIndicator()
+            else Text("Receta no encontrada")
         } else {
             Text(
                 text = receta.categoria,
