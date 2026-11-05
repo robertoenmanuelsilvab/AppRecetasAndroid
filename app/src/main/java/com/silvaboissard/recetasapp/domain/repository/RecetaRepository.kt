@@ -10,3 +10,7 @@ interface RecetaRepository {
     suspend fun obtenerPorId(id: Int): Receta?
     suspend fun agregar(nombre: String, categoria: String, tiempoPrepMinutos: Int)
 }
+
+
+
+
